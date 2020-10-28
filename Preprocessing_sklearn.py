@@ -32,21 +32,21 @@ df['age_gender'] = df['p_age_group_sdc'] + df['p_gender_sdc']
 # Update age_gender
 def age_gender_update(row,attribute):
     if row['age_gender'] == '"1""1"':
-        return "18-29 Male"
+        return 1
     elif row['age_gender'] == '"1""2"':
-        return "18-29 Female"
+        return 2
     elif row['age_gender'] == '"2""1"':
-        return "30-49 Male"
+        return 3
     elif row['age_gender'] == '"2""2"':
-        return "30-49 Female"
+        return 4
     elif row['age_gender'] == '"3""1"':
-        return "50-64 Male"
+        return 5
     elif row['age_gender'] == '"3""2"':
-        return "50-64 Female"
+        return 6
     elif row['age_gender'] == '"4""1"':
-        return "65+ Male"
+        return 7
     elif row['age_gender'] == '"4""2"':
-        return "65+ Female"
+        return 8
     else:
         return 'Error'
 
@@ -57,13 +57,21 @@ df[attribute] = df.apply(lambda row: age_gender_update(row,attribute), axis=1)
 df.drop(['p_age_group_sdc','p_gender_sdc'], axis=1, inplace=True)
 
 
+# Convert columns to numeric
+df.replace({'"': ''}, regex=True, inplace=True)
+cols = ['Q1', 'Q2', 'Q4', 'Q6a', 'Q6b', 'Q6c', 'Q6d', 'Q7a', 'Q7b', 'Q7c', 'Q7d', 'Q7e',
+        'Q10a', 'Q10b', 'Q10c', 'Q10d', 'sDevType','sOSName']
+df[cols] = df[cols].apply(pd.to_numeric, errors='coerce', axis=1)
+
+
 
 '''Final Checks - Printing Values'''
 print(df)
 print(df.isnull().sum(axis = 0))
 # print(df.Q4.describe())
-print(df['age_gender'].value_counts())
+print(df.dtypes)
+# print(df['age_gender'].value_counts())
 
 
 # Create a csv for the merged datasets
-df.to_csv('8410_processed.csv', index=False)
+df.to_csv('8410_processed_sklearn.csv', index=False)
