@@ -20,18 +20,15 @@ df.drop(['Q19a','Q19b','Q19c','Q19d','Q19e','Q19f','Q19g'], axis=1, inplace=True
 df.drop(['Sect_0_time','Sect_1_time','Sect_2_time','Sect_3_time','Sect_4_time','Sect_5_time'], axis=1, inplace=True)
 df.drop(['Sect_6_time','Sect_7_time','Sect_8_time','Sect_9_time','Sect_10_time','Sect_11_time'], axis=1, inplace=True)
 df.drop(['Sect_12_time','Sect_13_time','Sect_14_time','Sect_15_time','Sect_16_time'], axis=1, inplace=True)
-df.drop(['p_state','p_education_sdc','p_age_group_sdc'], axis=1, inplace=True)
+# df.drop(['p_state','p_education_sdc','p_age_group_sdc'], axis=1, inplace=True)
 
 # Drop the 42 rows missing an age_group and 4 rows missing a gender
-# df.dropna(how='any', subset=['p_age_group_sdc'], inplace=True)    Don't worry about dropping the age groups
+df.dropna(how='any', subset=['p_age_group_sdc'], inplace=True)
 df.dropna(how='any', subset=['p_gender_sdc'], inplace=True)
+df.dropna(how='any', subset=['p_education_sdc'], inplace=True)
 
-
-# Drop the age and gender attributes after they have been combined
-# df.drop(['p_age_group_sdc','p_gender_sdc'], axis=1, inplace=True)
-
-# Rename gender column
-df = df.rename(columns={'p_gender_sdc': 'gender'})
+# Rename the columns
+df = df.rename(columns={'p_gender_sdc': 'gender','p_age_group_sdc': 'age_group','p_education_sdc': 'education'})
 
 # Convert columns to numeric
 df.replace({'"': ''}, regex=True, inplace=True)
@@ -50,4 +47,4 @@ print(df.dtypes)
 
 
 # Create a csv for the merged datasets
-df.to_csv('8410_processed_sklearn_gender.csv', index=False)
+df.to_csv('8410_processed_sklearn_FULL.csv', index=False)
